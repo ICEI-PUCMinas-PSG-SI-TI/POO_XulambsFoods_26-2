@@ -26,6 +26,7 @@ namespace XulambsFoods {
 
         private int _quantIngredientes;
         private string _descricao;
+        private EBorda _borda;
         #endregion
 
         #region construtores
@@ -33,6 +34,7 @@ namespace XulambsFoods {
         private void Init(int adicionais) {
             _descricao = "Pizza";
             AdicionarIngredientes(adicionais);
+            Adicionarborda(_borda);
             s_pizzasVendidas++;
         }
 
@@ -59,7 +61,7 @@ namespace XulambsFoods {
         private double ValorAdicionais() {
             return ValorPorAdicional * _quantIngredientes;
         }
-
+               
         private void ModificarDescricao() {
             _descricao = $"Pizza com {_quantIngredientes} adicionais";
         }
@@ -72,7 +74,14 @@ namespace XulambsFoods {
 
         #region métodos públicos
         public double CalcularValorFinal() {
-            return PrecoBase + ValorAdicionais();
+            double valorBorda = _borda.Valor();
+
+            return PrecoBase + ValorAdicionais() + valorBorda;
+        }
+
+        public void Adicionarborda(EBorda borda)
+        {
+            _borda = borda;
         }
 
         /// <summary>
@@ -97,7 +106,7 @@ namespace XulambsFoods {
         public string GerarCupom() {
             StringBuilder cupom = new StringBuilder("Xulambs Pizza!!!\n");
             cupom.AppendLine("================");
-            cupom.AppendLine($"{_descricao}");
+            cupom.AppendLine($"{_descricao}com borda {_borda}");
             cupom.AppendLine($"\tPizza: {PrecoBase:C2}");
             cupom.AppendLine($"\t{_quantIngredientes} adicionais : {ValorAdicionais():C2}");
             cupom.AppendLine($"TOTAL: {CalcularValorFinal():C2}");
